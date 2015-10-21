@@ -1,0 +1,67 @@
+---
+title: "Stockholm Prostate Cancer"
+author: "Mark Dunning"
+date: "11 September 2015"
+output:
+  BiocStyle::html_document
+---
+
+In this document, I describe how the GEO data entry for the Varambally data was processed and saved into an object for analysis in Bioconductor. First of all load the relevant libraries for grabbing and manipulaing the data
+
+```{r}
+library(GEOquery)
+library(dplyr)
+library(tidyr)
+
+```
+
+
+Now use the `getGEO` function with the correct ID
+
+```{r}
+
+  url <- "ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE70nnn/GSE70769/matrix/"
+  destfile <-"GSE70769_series_matrix.txt.gz"
+  
+  if(!file.exists(destfile)){
+  download.file(paste(url,destfile,sep=""),destfile=destfile)
+  }
+  
+geoData <- getGEO(filename=destfile)
+  
+```  
+
+
+We tidy up the data from GEO; creating a new data frame of just the clinical characteristics of interest.
+
+```{r}
+
+pd <- pData(geoData)
+
+
+pd2 <- data.frame("geo_accession" = pd$geo_accession, Sample = gsub("tumour tissue_robotic radical prostatetctomy_","",pd$title),Gleason=gsub("tumour gleason: ","",pd$characteristics_ch1), ECE=gsub("extra capsular extension (ece): ","",pd$characteristics_ch1.2,fixed=TRUE),PSM = gsub("positive surgical margins (psm): ","",pd$characteristics_ch1.3,fixed=TRUE),BCR = gsub("biochemical relapse (bcr): ","",pd$characteristics_ch1.4,fixed=TRUE), Time = gsub("time to bcr (months): ","",pd$characteristics_ch1.5,fixed=TRUE))
+
+#pd2$iCluster <- gsub("N/A", NA, pd2$iCluster)
+#pd2$iCluster[which(pd2$iCluster == "")] <- NA
+
+pd2$Gleason <- gsub("N/A", NA, pd2$Gleason)
+pd2$Gleason <- gsub("unknown",NA,pd2$Gleason)
+
+pd2$ECE <- gsub("UNKNOWN",NA,pd2$ECE)
+pd2$ECE[which(pd2$ECE == "")] <- NA
+
+pd2$PSM <- gsub("UNKNOWN",NA,pd2$PSM)
+pd2$PSM[which(pd2$PSM == "")] <- NA
+
+pd2$BCR <- gsub("N/A", NA, pd2$BCR)
+pd2$BCR[which(pd2$BCR == "")] <- NA
+
+pd2$Time <- gsub("N/A", NA, pd2$Time)
+pd2$Time <- gsub("UNKNOWN",NA,pd2$Time)
+pd2$Time[which(pd2$Time == "")] <- NA
+
+
+rownames(pd2) <- pd2$geo_accession
+pData(geoData) <- pd2
+camcap <- geoData
+save(camcap, file="../data/camcap.rda")
