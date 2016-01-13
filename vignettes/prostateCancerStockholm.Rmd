@@ -63,5 +63,5 @@ pd2$Time[which(pd2$Time == "")] <- NA
 
 rownames(pd2) <- pd2$geo_accession
 pData(geoData) <- pd2
-camcap <- geoData
-save(camcap, file="../data/camcap.rda")
+stockholm <- geoData
+save(stockholm, file="../data/stockholm.rda")
