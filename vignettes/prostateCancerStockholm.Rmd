@@ -39,10 +39,9 @@ We tidy up the data from GEO; creating a new data frame of just the clinical cha
 pd <- pData(geoData)
 
 
-pd2 <- data.frame("geo_accession" = pd$geo_accession, Sample = gsub("tumour tissue_robotic radical prostatetctomy_","",pd$title),Gleason=gsub("tumour gleason: ","",pd$characteristics_ch1), ECE=gsub("extra capsular extension (ece): ","",pd$characteristics_ch1.2,fixed=TRUE),PSM = gsub("positive surgical margins (psm): ","",pd$characteristics_ch1.3,fixed=TRUE),BCR = gsub("biochemical relapse (bcr): ","",pd$characteristics_ch1.4,fixed=TRUE), Time = gsub("time to bcr (months): ","",pd$characteristics_ch1.5,fixed=TRUE))
+pd2 <- data.frame("geo_accession" = pd$geo_accession, Sample = gsub("tumour tissue_robotic radical prostatetctomy_","",pd$title),Gleason=gsub("tumour gleason: ","",pd$characteristics_ch1), ECE=gsub("extra capsular extension (ece): ","",pd$characteristics_ch1.2,fixed=TRUE),PSM = gsub("positive surgical margins (psm): ","",pd$characteristics_ch1.3,fixed=TRUE),BCR = gsub("biochemical relapse (bcr): ","",pd$characteristics_ch1.4,fixed=TRUE), Time = gsub("time to bcr (months): ","",pd$characteristics_ch1.5,fixed=TRUE), iCluster = gsub("derived data (iclusterplus group): ","",pd$characteristics_ch1.6,fixed=TRUE),PSA=gsub("psa at diag: ", "",pd$characteristics_ch1.7,fixed=TRUE), ClinicalStage = gsub("clinical stage: ","", pd$characteristics_ch1.8,fixed=TRUE),PathStage = gsub("pathology stage: ","",pd$characteristics_ch1.9,fixed=TRUE),FollowUpTime = gsub("total follow up (months): ","",pd$characteristics_ch1.10,fixed=TRUE))
 
-#pd2$iCluster <- gsub("N/A", NA, pd2$iCluster)
-#pd2$iCluster[which(pd2$iCluster == "")] <- NA
+
 
 pd2$Gleason <- gsub("N/A", NA, pd2$Gleason)
 pd2$Gleason <- gsub("unknown",NA,pd2$Gleason)
@@ -59,6 +58,11 @@ pd2$BCR[which(pd2$BCR == "")] <- NA
 pd2$Time <- gsub("N/A", NA, pd2$Time)
 pd2$Time <- gsub("UNKNOWN",NA,pd2$Time)
 pd2$Time[which(pd2$Time == "")] <- NA
+
+pd2$FollowUpTime <- gsub("N/A", NA, pd2$FollowUpTime)
+pd2$FollowUpTime <- gsub("UNKNOWN",NA,pd2$FollowUpTime)
+pd2$FollowUpTime[which(pd2$FollowUpTime == "")] <- NA
+
 
 
 rownames(pd2) <- pd2$geo_accession
