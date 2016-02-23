@@ -1,0 +1,12 @@
+Package: prostateCancerStockholm
+Type: Package
+Title: Prostate Cancer Data
+Version: 0.1
+Date: 2015-09-10
+Author: Mark Dunning
+Maintainer: Mark Dunning <mark.dunning@cruk.cam.ac.uk>
+Description: A Bioconductor data package for the Stockholm dataset
+License: GPL 2.0
+LazyData: TRUE
+VignetteBuilder: knitr
+Suggests: BiocStyle, knitr, GEOquery, dplyr
