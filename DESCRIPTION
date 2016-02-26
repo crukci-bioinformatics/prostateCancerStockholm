@@ -11,3 +11,4 @@ LazyData: TRUE
 VignetteBuilder: knitr
 Depends:Biobase , R (>= 2.10) 
 Suggests: BiocStyle, knitr, GEOquery, dplyr
+biocViews: GEO, MicroarrayData
