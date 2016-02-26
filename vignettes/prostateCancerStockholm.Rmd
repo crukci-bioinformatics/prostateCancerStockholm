@@ -68,4 +68,4 @@ pd2$FollowUpTime[which(pd2$FollowUpTime == "")] <- NA
 rownames(pd2) <- pd2$geo_accession
 pData(geoData) <- pd2
 stockholm <- geoData
-save(stockholm, file="../data/stockholm.rda")
+save(stockholm, file="data/stockholm.rda",compress="xz")
