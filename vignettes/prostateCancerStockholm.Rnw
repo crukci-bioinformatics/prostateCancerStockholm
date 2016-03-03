@@ -9,7 +9,7 @@
 
 In this document, I describe how the GEO data entry for the Stockholm cohort of Ross-Adams et al (2015) data was processed and saved into an object for analysis in Bioconductor. First of all load the relevant libraries for grabbing and manipulaing the data
 
-<<>>=
+<<eval=FALSE>>=
 library(GEOquery)
 library(dplyr)
 library(tidyr)
@@ -18,7 +18,7 @@ library(tidyr)
 
 Now use the `getGEO` function with the correct ID
 
-<<>>=
+<<eval=FALSE>>=
   url <- "ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE70nnn/GSE70769/matrix/"
   destfile <-"GSE70769_series_matrix.txt.gz"
   
@@ -31,7 +31,7 @@ geoData <- getGEO(filename=destfile)
 
 We tidy up the data from GEO; creating a new data frame of just the clinical characteristics of interest
 
-<<>>=
+<<eval=FALSE>>=
 
 pd <- pData(geoData)
 
