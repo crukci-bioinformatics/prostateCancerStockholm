@@ -7,7 +7,7 @@
       GSE70769
     }
     \description{
-      Object imported using GEOquery and curated to remove variables introduced by GEO
+      Object imported using GEOquery and curated to remove variables introduced by GEO. Details in vignette.
     }
     \author{
 Mark Dunning
