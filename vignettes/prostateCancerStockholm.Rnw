@@ -7,16 +7,17 @@
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
-In this document, I describe how the GEO data entry for the Stockholm cohort of Ross-Adams et al (2015) data was processed and saved into an object for analysis in Bioconductor. First of all load the relevant libraries for grabbing and manipulaing the data
+\emph{Integration of copy number and transcriptomics provides risk stratification in prostate cancer: A discovery and validation cohort study}
+\emph{Ross-Adams et al. (2015) doi:10.1016/j.ebiom.2015.07.017}
+
+In this document, I describe how the GEO data entry for the Stockholm (validation) cohort of Ross-Adams et al (2015) data was processed and saved into an object for analysis in Bioconductor. First of all load the relevant libraries for grabbing and manipulaing the data
 
 <<eval=FALSE>>=
 library(GEOquery)
-library(dplyr)
-library(tidyr)
 @
 
 
-Now use the `getGEO` function with the correct ID
+Now use the {\tt getGEO} function with the correct ID. If the series matrix file has already been downloaded, don't bother to download again.
 
 <<eval=FALSE>>=
   url <- "ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE70nnn/GSE70769/matrix/"
@@ -29,14 +30,27 @@ Now use the `getGEO` function with the correct ID
 geoData <- getGEO(filename=destfile)
 @
 
-We tidy up the data from GEO; creating a new data frame of just the clinical characteristics of interest
+We tidy up the data from GEO; creating a new data frame of just the clinical characteristics of interest. Make sure that only {\tt NA} is used for missing values.
+
+The pheno data also contains the five {\tt iCluster} groups which were determined by integrative clustering.
 
 <<eval=FALSE>>=
 
 pd <- pData(geoData)
 
 
-pd2 <- data.frame("geo_accession" = pd$geo_accession, Sample = gsub("tumour tissue_robotic radical prostatetctomy_","",pd$title),Gleason=gsub("tumour gleason: ","",pd$characteristics_ch1), ECE=gsub("extra capsular extension (ece): ","",pd$characteristics_ch1.2,fixed=TRUE),PSM = gsub("positive surgical margins (psm): ","",pd$characteristics_ch1.3,fixed=TRUE),BCR = gsub("biochemical relapse (bcr): ","",pd$characteristics_ch1.4,fixed=TRUE), Time = gsub("time to bcr (months): ","",pd$characteristics_ch1.5,fixed=TRUE), iCluster = gsub("derived data (iclusterplus group): ","",pd$characteristics_ch1.6,fixed=TRUE),PSA=gsub("psa at diag: ", "",pd$characteristics_ch1.7,fixed=TRUE), ClinicalStage = gsub("clinical stage: ","", pd$characteristics_ch1.8,fixed=TRUE),PathStage = gsub("pathology stage: ","",pd$characteristics_ch1.9,fixed=TRUE),FollowUpTime = gsub("total follow up (months): ","",pd$characteristics_ch1.10,fixed=TRUE))
+pd2 <- data.frame("geo_accession" = pd$geo_accession, 
+    Sample = gsub("tumour tissue_robotic radical prostatetctomy_","",pd$title),
+  Gleason=gsub("tumour gleason: ","",pd$characteristics_ch1), 
+  ECE=gsub("extra capsular extension (ece): ","",pd$characteristics_ch1.2,fixed=TRUE),
+  PSM = gsub("positive surgical margins (psm): ","",pd$characteristics_ch1.3,fixed=TRUE),
+  BCR = gsub("biochemical relapse (bcr): ","",pd$characteristics_ch1.4,fixed=TRUE), 
+  Time = gsub("time to bcr (months): ","",pd$characteristics_ch1.5,fixed=TRUE), 
+  iCluster = gsub("derived data (iclusterplus group): ","",pd$characteristics_ch1.6,fixed=TRUE),
+  PSA=gsub("psa at diag: ", "",pd$characteristics_ch1.7,fixed=TRUE), 
+  ClinicalStage = gsub("clinical stage: ","", pd$characteristics_ch1.8,fixed=TRUE),
+  PathStage = gsub("pathology stage: ","",pd$characteristics_ch1.9,fixed=TRUE),
+  FollowUpTime = gsub("total follow up (months): ","",pd$characteristics_ch1.10,fixed=TRUE))
 
 pd2$iCluster <- gsub("NA",NA,pd2$iCluster)
 
