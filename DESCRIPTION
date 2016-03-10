@@ -2,7 +2,7 @@ Package: prostateCancerStockholm
 Type: Package
 Title: Prostate Cancer Data
 Version: 0.99.0
-Date: 2015-09-10
+Date: 2016-03-10
 Author: Mark Dunning
 Maintainer: Mark Dunning <mark.dunning@cruk.cam.ac.uk>
 Description: A Bioconductor data package for the Stockholm dataset
